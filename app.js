@@ -37,7 +37,9 @@ Client.connect().then(function(){
 
 
 
-
+app.get('/', (req,res)=>{
+    res.send('server is running successfuly ')
+})
 
 
 
