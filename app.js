@@ -14,6 +14,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
+console.log("userRoutes loaded successfully")
 app.use("/api/users", userRoutes);
 
 const PORT = process.env.PORT || 3000;
