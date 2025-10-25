@@ -19,10 +19,17 @@ app.use("/api/users", userRoutes);
 const PORT = process.env.PORT || 3000;
 const DATABASE_URL = process.env.DATABASE;
 
-// إنشاء اتصال بـ PostgreSQL
+if (!DATABASE_URL) {
+  console.error("❌ DATABASE URL is missing! Check your .env or Railway Variables.");
+  process.exit(1);
+}
+
+// ✅ تعديل الذكاء التلقائي للـ SSL
 const client = new Client({
   connectionString: DATABASE_URL,
-  ssl: { rejectUnauthorized: false }, // دي مهمة جدًا لـ Railway
+  ssl: DATABASE_URL.includes("localhost")
+    ? false
+    : { rejectUnauthorized: false },
 });
 
 client
@@ -34,16 +41,13 @@ client
     });
   })
   .catch((err) => {
-    console.error("❌ DB connection error:", err);
+    console.error("❌ DB connection error:", err.message);
   });
 
-// test route
+// ✅ Route للاختبار
 app.get("/", (req, res) => {
   res.send("Server is running successfully ✅");
 });
-
-
-
 
 
 
