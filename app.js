@@ -24,30 +24,25 @@ app.use('/api/users',userRoutes);
 
 
 // connect db
-const PORT = 3000
-const DATABASE = process.env.DATABASE
-const Client = new pg.Client(DATABASE)
-Client.connect().then(function(){
-    app.listen(PORT , function(){
-        console.log(" DB is connected ");
-    })
-}).catch(function(err){
-    console.error(" DB connection error ")
-})
+const PORT = process.env.PORT || 3000;
 
-
-
-app.get('/', (req,res)=>{
-    res.send('server is running successfuly ')
-})
-
-
-
-
-
-app.listen(PORT, () => {console.log('Server running on port ${PORT}');
-    
+app.get('/', (req, res) => {
+  res.send('Server is running successfully ✅');
 });
+
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`);
+});
+
+
+// app.get('/', (req,res)=>{
+//     res.send('server is running successfuly ')
+// })
+
+
+// app.listen(PORT, () => {console.log('Server running on port ${PORT}');
+
+// });
 
 
 
