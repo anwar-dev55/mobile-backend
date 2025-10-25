@@ -1,48 +1,47 @@
 const express = require("express");
-const pg = require("pg");
+const { Client } = require("pg");
 const http = require("http");
 const socketio = require("socket.io");
 const bodyParser = require("body-parser");
-require("dotenv").config()
-const userRoutes = require('./router/user.router');
-const pool = require('./DB/db');
-const cors = require("cors")
-
+require("dotenv").config();
+const userRoutes = require("./router/user.router");
+const cors = require("cors");
 
 const app = express();
 const server = http.createServer(app);
-app.use(bodyParser.json())
+
+app.use(bodyParser.json());
 app.use(cors());
-app.use(express.urlencoded({extended : true}))
+app.use(express.urlencoded({ extended: true }));
 
+app.use("/api/users", userRoutes);
 
-
-app.use('/api/users',userRoutes);
-
-
-
-
-
-// connect db
 const PORT = process.env.PORT || 3000;
+const DATABASE_URL = process.env.DATABASE;
 
-app.get('/', (req, res) => {
-  res.send('Server is running successfully ✅');
+// إنشاء اتصال بـ PostgreSQL
+const client = new Client({
+  connectionString: DATABASE_URL,
+  ssl: { rejectUnauthorized: false }, // دي مهمة جدًا لـ Railway
 });
 
-app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
+client
+  .connect()
+  .then(() => {
+    console.log("✅ Connected to PostgreSQL successfully!");
+    server.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("❌ DB connection error:", err);
+  });
+
+// test route
+app.get("/", (req, res) => {
+  res.send("Server is running successfully ✅");
 });
 
-
-// app.get('/', (req,res)=>{
-//     res.send('server is running successfuly ')
-// })
-
-
-// app.listen(PORT, () => {console.log('Server running on port ${PORT}');
-
-// });
 
 
 
