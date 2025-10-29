@@ -5,6 +5,8 @@ const socketio = require("socket.io");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 const userRoutes = require("./router/user.router");
+console.log("userRoutes loaded successfully")
+app.use("/api/users", userRoutes);
 const cors = require("cors");
 
 const app = express();
@@ -14,8 +16,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
-console.log("userRoutes loaded successfully")
-app.use("/api/users", userRoutes);
+
 
 const PORT = process.env.PORT || 8080;
 const DATABASE_URL = process.env.DATABASE;
