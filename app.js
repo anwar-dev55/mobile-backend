@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 
-app.use("/api/users", userRoutes);
+app.use("/api/users", require("./router/user.router"));
 
 
 const PORT = process.env.PORT || 8080;
