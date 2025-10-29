@@ -4,7 +4,7 @@ const http = require("http");
 const socketio = require("socket.io");
 const bodyParser = require("body-parser");
 require("dotenv").config();
-const userRoutes = require("./router/user.router");
+const userRouter = require('./router/user.router')
 // console.log("userRoutes loaded successfully")
 const cors = require("cors");
 
@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 
-app.use("/user",userRoutes);
+app.use('/' , userRouter)
 
 
 const PORT = process.env.PORT || 3000;
