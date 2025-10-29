@@ -12,10 +12,12 @@ const cors = require("cors");
 const app = express();
 const server = http.createServer(app);
 
-app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+
 app.use("/api/users", userRoutes);
 
 
