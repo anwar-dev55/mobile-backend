@@ -18,10 +18,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 
-app.use('/' , userRouter)
+app.use('/api/users', userRouter);
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 const DATABASE_URL = process.env.DATABASE;
 
 if (!DATABASE_URL) {
