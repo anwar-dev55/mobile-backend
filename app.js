@@ -1,13 +1,10 @@
 const express = require("express");
 const { Client } = require("pg");
 const http = require("http");
-const socketio = require("socket.io");
 const bodyParser = require("body-parser");
 require("dotenv").config();
-const userRouter = require('./router/user.router')
-// console.log("userRoutes loaded successfully")
+const userRouter = require("./router/user.router");
 const cors = require("cors");
-
 
 const app = express();
 const server = http.createServer(app);
@@ -17,11 +14,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// ✅ جرب أولاً نضيف اختبار مباشر هنا
+app.get("/", (req, res) => {
+  res.send("Main route is working ✅");
+});
 
-app.use('/api/users', userRouter);
+// ✅ دي مهمه جدًا
+app.use("/api/users", userRouter);
 
-
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 const DATABASE_URL = process.env.DATABASE;
 
 if (!DATABASE_URL) {
@@ -29,7 +30,6 @@ if (!DATABASE_URL) {
   process.exit(1);
 }
 
-// ✅ تعديل الذكاء التلقائي للـ SSL
 const client = new Client({
   connectionString: DATABASE_URL,
   ssl: DATABASE_URL.includes("localhost")
@@ -47,10 +47,7 @@ client
   })
   .catch((err) => {
     console.error("❌ DB connection error:", err.message);
-  });
-
-// ✅ Route للاختبار
-
+});
 
 
 
