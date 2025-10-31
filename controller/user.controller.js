@@ -12,14 +12,26 @@ exports.register = async function (req, res) {
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await User.create({ name, email, age, password: hashedPassword, role });
 
+    // ✅ إنشاء التوكن بعد التسجيل
+    const token = jwt.sign(
+      { email: newUser.email, id: newUser.id, role: newUser.role },
+      'secretKey',
+      { expiresIn: '1h' }
+    );
+
+    // ✅ إرسال التوكن في الرد
     return res.json({
       message: 'User Registered Successfully',
-      user: { email: newUser.email, name: newUser.name },
+      user: {
+        email: newUser.email,
+        name: newUser.name,
+        jwt: token,
+      },
     });
   } catch (err) {
     console.log('register error:', err);
-    res.status(400).send({ message: err.message });
-  }
+    res.status(400).send({ message: err.message });
+  }
 };
 
 // LOGIN USER
@@ -40,7 +52,7 @@ exports.login = async function (req, res) {
 
     return res.json({
       message: 'User Logged Successfully',
-    //   user: { email: user.email, name: user.name, jwt: token },
+      user: { email: user.email, name: user.name, jwt: token },
     user: {jwt: token},
     });
   } catch (err) {
