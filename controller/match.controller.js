@@ -13,14 +13,18 @@ exports.getAllMatches = async (req, res) => {
 
 exports.addMatch = async (req, res) => {
   try {
-    const { home_team, away_team, start_time } = req.body;
-    const match = await Match.create({ home_team, away_team, start_time });
-    res.json(match);
+    const { home_team, away_team, start_time, status } = req.body;
+    const result = await client.query(
+      "INSERT INTO matches (home_team, away_team, start_time, status, home_score, away_score) VALUES ($1,$2,$3,$4,0,0) RETURNING *",
+      [home_team, away_team, start_time, status || "upcoming"]
+    );
+    res.status(201).json(result.rows[0]);
   } catch (err) {
-    console.error('Add match error:', err);
-    res.status(400).json({ message: err.message });
+    console.error("Error adding match:", err);
+    res.status(500).send("Error adding match");
   }
 };
+
 
 exports.addEvent = async (req, res) => {
   try {
