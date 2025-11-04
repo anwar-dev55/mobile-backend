@@ -6,11 +6,11 @@ const Match = {
     return result.rows;
   },
 
-  async create({ home_team, away_team, start_time }) {
+  async create({ home_team, away_team, start_time, status, home_score, away_score}) {
     const result = await pool.query(
-      `INSERT INTO matches (home_team, away_team, start_time) 
+      `INSERT INTO matches (home_team, away_team, start_time, status, home_score, away_score) 
        VALUES ($1, $2, $3) RETURNING *`,
-      [home_team, away_team, start_time]
+      [home_team, away_team, start_time, status, home_score, away_score]
     );
     return result.rows[0];
   },

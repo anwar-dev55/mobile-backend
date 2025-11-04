@@ -16,7 +16,7 @@ exports.addMatch = async (req, res) => {
     const { home_team, away_team, start_time, status } = req.body;
     const result = await client.query(
       "INSERT INTO matches (home_team, away_team, start_time, status, home_score, away_score) VALUES ($1,$2,$3,$4,0,0) RETURNING *",
-      [home_team, away_team, start_time, status || "upcoming"]
+      [home_team, away_team, start_time, status, status, home_score, away_score || "upcoming"]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
