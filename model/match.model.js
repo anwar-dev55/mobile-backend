@@ -6,14 +6,15 @@ const Match = {
     return result.rows;
   },
 
-  async create({ home_team, away_team, start_time, status, home_score, away_score}) {
-    const result = await pool.query(
-      `INSERT INTO matches (home_team, away_team, start_time, status, home_score, away_score) 
-       VALUES ($1, $2, $3) RETURNING *`,
-      [home_team, away_team, start_time, status, home_score, away_score]
-    );
-    return result.rows[0];
-  },
+async create({ home_team, away_team, start_time, status, home_score = 0, away_score = 0 }) {
+  const result = await pool.query(
+    `INSERT INTO matches (home_team, away_team, start_time, status, home_score, away_score) 
+     VALUES ($1, $2, $3, $4, $5, $6) 
+     RETURNING *`,
+    [home_team, away_team, start_time, status || 'upcoming', home_score, away_score]
+  );
+  return result.rows[0];
+},
 
   async updateScore(id, home_score, away_score) {
     const result = await pool.query(
