@@ -1,26 +1,46 @@
 const express = require("express");
 const { Client } = require("pg");
 const http = require("http");
+const { Server } = require("socket.io"); 
 const bodyParser = require("body-parser");
 require("dotenv").config();
 const userRouter = require("./router/user.router");
+const matchRouter = require("./router/match.router"); 
 const cors = require("cors");
 
 const app = express();
 const server = http.createServer(app);
+
+
+const io = new Server(server, {
+  cors: { origin: "*" }
+});
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// ✅ جرب أولاً نضيف اختبار مباشر هنا
+
 app.get("/", (req, res) => {
   res.send("Main route is working ✅");
 });
 
-// ✅ دي مهمه جدًا
+
 app.use("/api/users", userRouter);
+app.use("/api/matches", matchRouter); 
+
+
+io.on("connection", (socket) => {
+  console.log("🟢 New client connected:", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("🔴 Client disconnected:", socket.id);
+  });
+});
+
+
+app.set("io", io);
 
 const PORT = process.env.PORT || 3000;
 const DATABASE_URL = process.env.DATABASE;
@@ -49,23 +69,6 @@ client
     console.error("❌ DB connection error:", err.message);
 });
 
-
-
-
-
-
-
-// const express = require('express');
-// const userRoutes = require('./routes/users.routes');
-// require('dotenv').config();
-
-// const app = express();
-// app.use(express.json());
-
-// app.use(userRoutes);
-
-// const PORT = 3000;
-// app.listen(PORT, () => console.log(Server running on port ${PORT}));
 
 
 
