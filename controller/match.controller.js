@@ -1,4 +1,4 @@
-const MatchModel = require("../models/match.model");
+const MatchModel = require("../model/match.model");
 const pool = require("../DB/db");
 
 exports.getAllMatches = async (req, res) => {
