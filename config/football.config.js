@@ -1,0 +1,4 @@
+module.exports = {
+  API_KEY: process.env.FOOTBALL_API_KEY,
+  BASE_URL: "https://v3.football.api-sports.io",
+};
