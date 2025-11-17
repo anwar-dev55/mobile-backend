@@ -1,4 +1,4 @@
-const pool = require("../db");
+const pool = require("../DB/db");
 
 class MatchModel {
   static async getAll() {

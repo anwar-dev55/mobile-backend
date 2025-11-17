@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const matchController = require("../controllers/match.controller");
+const matchController = require("../controller/match.controller");
 
 router.get("/", matchController.getAllMatches);
 router.get("/:id", matchController.getMatchById);
