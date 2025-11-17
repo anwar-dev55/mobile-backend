@@ -1,9 +1,11 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const matchController = require('../controller/match.controller');
+const matchController = require("../controllers/match.controller");
 
-router.get('/', matchController.getAllMatches);
-router.post('/', matchController.addMatch);
-router.post('/event', matchController.addEvent);
+router.get("/", matchController.getAllMatches);
+router.get("/:id", matchController.getMatchById);
+router.post("/", matchController.createMatch);
+router.put("/:id/score", matchController.updateScore);
+router.put("/:id/status", matchController.updateStatus);
 
 module.exports = router;

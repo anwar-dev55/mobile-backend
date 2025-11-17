@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 require("dotenv").config();
 const userRouter = require("./router/user.router");
 const matchRouter = require("./router/match.router"); 
+const footballRouter = require("./router/football.router");
 const cors = require("cors");
 
 const app = express();
@@ -29,7 +30,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/users", userRouter);
 app.use("/api/matches", matchRouter); 
-
+app.use("/api/football", footballRouter);
 
 io.on("connection", (socket) => {
   console.log("🟢 New client connected:", socket.id);
