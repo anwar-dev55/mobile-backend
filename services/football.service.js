@@ -1,5 +1,5 @@
 const axios = require("axios");
-const pool = require("../DB/db"); // لو انت عامل db.js
+const pool = require("../DB/db");
 const { API_KEY, BASE_URL } = require("../config/football.config");
 
 const api = axios.create({
@@ -9,30 +9,48 @@ const api = axios.create({
 
 class FootballService {
 
-  // جلب كل المباريات اليوم لكل الدوريات
-  static async fetchAllMatches() {
-    try {
-      const date = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
-      const res = await api.get("/fixtures", { params: { date } });
-      return res.data.response;
-    } catch (err) {
-      console.error("Football API Error:", err.response?.data || err.message);
-      return [];
-    }
+  // ماتشات حسب اليوم
+  static async fixturesByDate(date) {
+    const res = await api.get("/fixtures", { params: { date } });
+    return res.data.response;
   }
 
-  // حفظ المباريات في DB
+  // ماتشات قديمة (من - إلى)
+  static async pastMatches(from, to) {
+    const res = await api.get("/fixtures", { params: { from, to } });
+    return res.data.response;
+  }
+
+  // تفاصيل مباراة واحدة
+  static async fixtureDetails(fixtureId) {
+    const res = await api.get("/fixtures", { params: { id: fixtureId } });
+    return res.data.response[0];
+  }
+
+  // ترتيب دوري معين
+  static async leagueStandings(leagueId, season) {
+    const res = await api.get("/standings", { params: { league: leagueId, season } });
+    return res.data.response[0].league.standings[0];
+  }
+
+  // إحصائيات فريق
+  static async teamStats(leagueId, season, teamId) {
+    const res = await api.get("/teams/statistics", {
+      params: { league: leagueId, season, team: teamId }
+    });
+    return res.data.response;
+  }
+
+  // حفظ ماتشات اليوم للـ DB
   static async saveMatches(fixtures) {
     for (const f of fixtures) {
-      const homeTeam = f.teams.home.name;
-      const awayTeam = f.teams.away.name;
       await pool.query(
         `INSERT INTO matches (home_team, away_team, start_time, status, home_score, away_score)
          VALUES ($1,$2,$3,$4,$5,$6)
          ON CONFLICT DO NOTHING`,
         [
-          homeTeam,
-          awayTeam,
+          f.teams.home.name,
+          f.teams.away.name,
           f.fixture.date,
           f.fixture.status.short,
           f.goals.home ?? 0,
@@ -42,6 +60,7 @@ class FootballService {
     }
     return { message: "Matches saved successfully" };
   }
+
 }
 
 module.exports = FootballService;
