@@ -1,23 +1,23 @@
 const express = require("express");
 const router = express.Router();
-const controller = require("../controller/football.controller");
+const Controller = require("../controller/football.controller");
 
 // 🔵 حفظ ماتشات النهارده
-router.get("/load", controller.loadTodayMatches);
+router.get("/load", Controller.loadTodayMatches);
 
 // 🔵 ماتشات تاريخ معين
-router.get("/date/:date", controller.getMatchesByDate);
+router.get("/date/:date", Controller.getMatchesByDate);
 
 // 🔵 ماتشات قديمة
-router.get("/past", controller.getPastMatches);
+router.get("/past", Controller.getPastMatches);
 
 // 🔵 تفاصيل مباراة
-router.get("/fixture/:id", controller.getFixtureDetails);
+router.get("/fixture/:id", Controller.getFixtureDetails);
 
 // 🔵 ترتيب دوري
-router.get("/standings", controller.getStandings);
+router.get("/standings", Controller.getStandings);
 
 // 🔵 إحصائيات فريق
-router.get("/team-stats", controller.getTeamStats);
+router.get("/team-stats", Controller.getTeamStats);
 
 module.exports = router;
