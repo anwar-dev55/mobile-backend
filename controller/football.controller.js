@@ -42,3 +42,16 @@ exports.getTeamStats = async (req, res) => {
   const data = await FootballService.teamStats(league, season, team);
   res.json(data);
 };
+
+//  احداث المباراة
+exports.sendLiveEvents = async (req, res) => {
+  const io = req.app.get("io");
+
+  const live = await FootballService.getLiveFromAPI();
+
+  live.forEach(match => {
+    FootballService.emitLiveUpdate(io, match);
+  });
+
+  res.json({ message: "Live events sent", count: live.length });
+};

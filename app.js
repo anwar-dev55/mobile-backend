@@ -36,6 +36,8 @@ app.use("/api/football", footballRouter);
 io.on("connection", (socket) => {
   console.log("🟢 New client connected:", socket.id);
 
+  socket.emit("connected", "You are connected to live Score!");
+
   socket.on("disconnect", () => {
     console.log("🔴 Client disconnected:", socket.id);
   });

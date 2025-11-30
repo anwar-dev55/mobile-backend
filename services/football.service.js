@@ -61,6 +61,17 @@ class FootballService {
     return { message: "Matches saved successfully" };
   }
 
+static emitLiveUpdate(io, fixture) {
+  io.emit("live:update", {
+    fixture_id: fixture.fixture.id,
+    home_team: fixture.teams.home.name,
+    away_team: fixture.teams.away.name,
+    home_score: fixture.goals.home,
+    away_score: fixture.goals.away,
+    status: fixture.fixture.status.short
+  });
+}
+
 }
 
 module.exports = FootballService;

@@ -20,4 +20,6 @@ router.get("/standings", Controller.getStandings);
 // 🔵 إحصائيات فريق
 router.get("/team-stats", Controller.getTeamStats);
 
+//  احداث المباراة
+router.get("/live-events", Controller.sendLiveEvents );
 module.exports = router;
