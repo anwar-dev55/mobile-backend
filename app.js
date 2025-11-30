@@ -7,6 +7,7 @@ require("dotenv").config();
 const userRouter = require("./router/user.router");
 const matchRouter = require("./router/match.router"); 
 const footballRouter = require("./router/football.router");
+const updateLive = require("./cron/liveUpdate.cron");
 const cors = require("cors");
 
 const app = express();
@@ -70,7 +71,10 @@ client
     console.error("❌ DB connection error:", err.message);
 });
 
-
+// شغل live update كل 20 ثانية
+setInterval(() => {
+  updateLive(io);
+}, 20000);
 
 
 
